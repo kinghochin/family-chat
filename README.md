@@ -1,0 +1,46 @@
+# Gatherly — trip research organiser
+
+A focused MVP for collecting and organising trip ideas. Create a topic, save links or notes, and drag ideas between collections such as Inbox, Tokyo, Kyoto, and Food & coffee.
+
+## Current MVP
+
+- Next.js App Router + TypeScript
+- Responsive board UI
+- Drag-and-drop cards between collections
+- Search/filtering of saved ideas
+- Manual idea composer for notes and links
+- Supabase schema with authentication-ready RLS policies
+- Local demo data so the board can be evaluated before connecting Supabase
+
+## Run locally
+
+```bash
+npm install
+npm run dev
+```
+
+Open http://localhost:3000.
+
+## Supabase setup
+
+1. Create a Supabase project.
+2. Run `supabase/migrations/001_initial_schema.sql` in the Supabase SQL editor.
+3. Add environment variables in `.env.local`:
+
+```bash
+NEXT_PUBLIC_SUPABASE_URL=your-project-url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+```
+
+The current board intentionally runs with local demo state. The next implementation slice should connect topic, collection, and item queries to Supabase after the interaction model is validated.
+
+## Verification
+
+```bash
+npm run lint
+npm run build
+```
+
+## Product direction
+
+The first useful product is a shared research organiser. Instagram/Threads capture should be added through an explicit browser extension or approved export/import route rather than making the MVP depend on fragile private-message scraping.
