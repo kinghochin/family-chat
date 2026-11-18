@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition } from "react";
-import { SourceBadge } from "@/components/family-shell";
+import { SourceBadge } from "@/components/source-badge";
 import { sendWebMessage, type SendMessageState } from "@/app/inbox/actions";
 
 type InboxMessage = {

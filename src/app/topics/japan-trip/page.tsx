@@ -1,6 +1,9 @@
 import Link from "next/link";
-import { FamilyShell, SourceBadge } from "@/components/family-shell";
+import { FamilyShell } from "@/components/family-shell";
+import { SourceBadge } from "@/components/source-badge";
 import { TopicAssistant } from "@/components/topic-assistant";
+
+export const instant = false;
 
 const linkedMessages = [
   { name: "Mum", initials: "M", tone: "peach", text: "What do we think about Japan in October?", time: "09:12", source: "Telegram" as const },
