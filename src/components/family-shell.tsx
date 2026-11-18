@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { signOutAction } from "@/app/auth-actions";
 
 export function FamilyShell({
   children,
@@ -23,7 +24,7 @@ export function FamilyShell({
           <Link className={active === "members" ? "active" : ""} href="/settings/members"><span>♧</span> Family members</Link>
           <Link className={active === "flow" ? "active" : ""} href="/flow"><span>⌁</span> Product flow</Link>
         </nav>
-        <div className="family-sidebar-bottom"><div className="family-member"><span className="member-avatar">JC</span><div><strong>Jamie Chen</strong><small>Online now</small></div><span className="more-button">···</span></div></div>
+        <div className="family-sidebar-bottom"><div className="family-member"><span className="member-avatar">JC</span><div><strong>Jamie Chen</strong><small>Signed in</small></div><form action={signOutAction}><button className="sign-out-button" type="submit">Sign out</button></form></div></div>
       </aside>
       <section className="family-main">
         <header className="family-topbar"><div><span className="family-overline">THE HARRIS FAMILY</span><h1>{title}</h1><p>{subtitle}</p></div><div className="family-top-actions"><button className="family-round-button" type="button">⌕</button><button className="family-round-button" type="button">♧</button><span className="member-avatar dark">JC</span></div></header>

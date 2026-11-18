@@ -35,6 +35,10 @@ SUPABASE_JWKS_URL=your-project-jwks-url
 
 The current board intentionally runs with local demo state. The next implementation slice should connect topic, collection, and item queries to Supabase after the interaction model is validated.
 
+## Authentication
+
+Run `supabase/migrations/003_auth_profiles.sql` after the conversation-memory migration. Then configure the Supabase Auth URL settings so the Site URL and redirect URLs include the deployed Vercel URL. The app provides `/login` and `/signup`, protects the family routes, and uses email/password authentication.
+
 ## Verification
 
 ```bash
