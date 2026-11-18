@@ -131,6 +131,14 @@ h1 span { color: #b0aab8; font-weight: 400; }
 .topic-suggestion small { color: #9d95a3; font-size: 7px; letter-spacing: .11em; font-weight: 800; }
 .topic-suggestion strong { color: #6e6675; font-size: 10px; line-height: 1.35; margin-top: 4px; }
 .topic-suggestion-action { grid-column: 2; justify-self: start; color: #7457dc; font-size: 9px; font-weight: 800; }
+.artifact-count { color: #a29aa8; font-size: 9px; margin-left: 5px; }
+.related-artifacts { margin: 18px 0 25px; }
+.related-artifacts .section-heading h3 { margin: 7px 0 0; font-size: 18px; letter-spacing: -.05em; }
+.related-artifact-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; margin-top: 12px; }
+.related-artifact-card { display: flex; align-items: center; gap: 9px; min-width: 0; border: 1px solid #ece8ef; border-radius: 9px; padding: 11px; color: #2b2632; text-decoration: none; }
+.related-artifact-card.lilac { background: #f5f2ff; }.related-artifact-card.green { background: #f1f8f2; }.related-artifact-card.peach { background: #fff5ed; }
+.related-artifact-card .artifact-icon { flex: 0 0 27px; width: 27px; height: 27px; font-size: 13px; }
+.related-artifact-card strong, .related-artifact-card small { display: block; }.related-artifact-card strong { font-size: 10px; }.related-artifact-card small { color: #9a929f; font-size: 8px; line-height: 1.35; margin-top: 3px; }.related-artifact-card .arrow { margin-left: auto; }
 .artifacts-hero { display: flex; justify-content: space-between; align-items: end; gap: 20px; }
 .artifacts-hero h2 { font-size: 29px; letter-spacing: -.06em; margin: 9px 0 6px; }
 .artifacts-hero h2 em { color: #a9a1b0; font-style: normal; font-weight: 400; }
@@ -172,6 +180,8 @@ h1 span { color: #b0aab8; font-weight: 400; }
   .artifacts-hero h2 { font-size: 25px; }
   .artifact-filter { overflow-x: auto; white-space: nowrap; }
   .artifact-grid { grid-template-columns: 1fr; }
+  .related-artifacts .section-heading { align-items: flex-start; gap: 10px; flex-direction: column; }
+  .related-artifact-grid { grid-template-columns: 1fr; }
   .topic-assistant { padding: 15px; }
   .assistant-form { align-items: stretch; flex-direction: column; }
   .assistant-form .primary-button { width: 100%; }
