@@ -1,5 +1,3 @@
-import TripBoard from "@/components/trip-board";
+import { InboxPage } from "@/app/inbox/page";
 
-export default function Home() {
-  return <TripBoard />;
-}
+export default InboxPage;

@@ -8,7 +8,7 @@ const messages = [
   { id: 5, name: "Sophie", initials: "S", tone: "green", text: "I can check school holiday dates tonight.", time: "18:42", source: "Web" as const, date: "Yesterday" },
 ];
 
-export default function InboxPage() {
+export function InboxPage() {
   return <FamilyShell active="inbox" title="Family inbox" subtitle="Every message, ready to become something useful.">
     <section className="composer-wide"><div className="composer-avatar">JC</div><div className="composer-input">What do you want to share with the family?<span>⌘ ↵</span></div><button className="primary-button" type="button">Send message</button></section>
     <div className="inbox-toolbar"><div><button className="filter-chip selected" type="button">All messages</button><button className="filter-chip" type="button">Needs organising</button><button className="filter-chip" type="button">In topics</button></div><div className="inbox-filters"><button type="button">⌕ Search</button><button type="button">◷ Date</button><button type="button">☷ Sender</button></div></div>
@@ -17,3 +17,5 @@ export default function InboxPage() {
     <div className="selection-helper"><span>⌁</span><div><strong>See a conversation taking shape?</strong><small>Select related messages and create a topic afterward.</small></div><button className="primary-button" type="button">Create topic</button></div>
   </FamilyShell>;
 }
+
+export default InboxPage;
