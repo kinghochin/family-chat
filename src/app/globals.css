@@ -140,6 +140,7 @@ h1 span { color: #b0aab8; font-weight: 400; }
 .related-artifact-card .artifact-icon { flex: 0 0 27px; width: 27px; height: 27px; font-size: 13px; }
 .related-artifact-card strong, .related-artifact-card small { display: block; }.related-artifact-card strong { font-size: 10px; }.related-artifact-card small { color: #9a929f; font-size: 8px; line-height: 1.35; margin-top: 3px; }.related-artifact-card .arrow { margin-left: auto; }
 .artifacts-hero { display: flex; justify-content: space-between; align-items: end; gap: 20px; }
+.artifacts-back-link { display: inline-block; margin-bottom: 25px; }
 .artifacts-hero h2 { font-size: 29px; letter-spacing: -.06em; margin: 9px 0 6px; }
 .artifacts-hero h2 em { color: #a9a1b0; font-style: normal; font-weight: 400; }
 .artifacts-hero p { color: #9b94a1; font-size: 12px; margin: 0; }
