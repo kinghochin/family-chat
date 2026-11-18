@@ -7,7 +7,7 @@ export function FamilyShell({
   subtitle = "One place for the conversations that matter.",
 }: {
   children: React.ReactNode;
-  active?: "inbox" | "topics" | "members" | "flow";
+  active?: "inbox" | "topics" | "artifacts" | "members" | "flow";
   title?: string;
   subtitle?: string;
 }) {
@@ -19,6 +19,7 @@ export function FamilyShell({
         <nav className="family-nav" aria-label="Family navigation">
           <Link className={active === "inbox" ? "active" : ""} href="/inbox"><span>▤</span> Inbox</Link>
           <Link className={active === "topics" ? "active" : ""} href="/topics"><span>◈</span> Topics <b>4</b></Link>
+          <Link className={active === "artifacts" ? "active" : ""} href="/artifacts"><span>▧</span> Artifacts <b>3</b></Link>
           <Link className={active === "members" ? "active" : ""} href="/settings/members"><span>♧</span> Family members</Link>
           <Link className={active === "flow" ? "active" : ""} href="/flow"><span>⌁</span> Product flow</Link>
         </nav>
