@@ -28,8 +28,9 @@ Open http://localhost:3000.
 3. Add environment variables in `.env.local`:
 
 ```bash
-NEXT_PUBLIC_SUPABASE_URL=your-project-url
-NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_URL=your-project-url
+SUPABASE_PUBLISHABLE_KEY=your-publishable-key
+SUPABASE_JWKS_URL=your-project-jwks-url
 ```
 
 The current board intentionally runs with local demo state. The next implementation slice should connect topic, collection, and item queries to Supabase after the interaction model is validated.
