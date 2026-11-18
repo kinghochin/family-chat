@@ -190,3 +190,26 @@ h1 span { color: #b0aab8; font-weight: 400; }
   .assistant-examples button { width: 100%; text-align: left; }
   .assistant-sources { align-items: flex-start; flex-direction: column; }
 }
+
+/* Mobile landscape: use the same compact navigation as portrait phones. */
+@media (max-width: 900px) and (max-height: 600px) and (orientation: landscape) {
+  .family-shell { display: block; min-height: 100dvh; }
+  .family-sidebar { width: 100%; height: auto; min-height: 0; padding: 10px 14px 7px; border-right: 0; border-bottom: 1px solid #ece9ef; display: block; }
+  .family-logo { display: inline-flex; align-items: center; padding: 0 4px; font-size: 18px; }
+  .family-logo span { font-size: 17px; }
+  .family-household { display: none; }
+  .family-nav { display: flex; gap: 5px; margin-top: 8px; overflow-x: auto; scrollbar-width: none; }
+  .family-nav::-webkit-scrollbar { display: none; }
+  .family-nav a { flex: 0 0 auto; justify-content: center; gap: 7px; padding: 7px 10px; white-space: nowrap; font-size: 10px; }
+  .family-nav a span { width: auto; font-size: 13px; }
+  .family-nav a b { display: inline; margin-left: 1px; }
+  .family-sidebar-bottom { display: none; }
+  .family-topbar { min-height: 68px; padding: 12px 20px 11px; }
+  .family-topbar h1 { font-size: 20px; margin: 5px 0 2px; }
+  .family-topbar p { font-size: 10px; }
+  .family-content { padding: 20px 20px 36px; }
+  .topic-grid { grid-template-columns: repeat(2, 1fr); }
+  .related-artifact-grid { grid-template-columns: repeat(3, 1fr); }
+  .assistant-form { flex-direction: row; }
+  .assistant-form .primary-button { width: auto; }
+}
