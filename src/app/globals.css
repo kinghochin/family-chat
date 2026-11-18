@@ -124,3 +124,10 @@ h1 span { color: #b0aab8; font-weight: 400; }
   .topic-detail-actions > div button { flex: 1; }
   .detail-heading h2 { font-size: 29px; }
 }
+
+.topic-suggestion { border-top: 1px solid #ffffffaa; margin-top: 14px; padding-top: 11px; display: grid; grid-template-columns: 18px 1fr; gap: 7px; align-items: start; }
+.topic-suggestion > span { color: #8265e6; font-size: 14px; }
+.topic-suggestion small, .topic-suggestion strong { display: block; }
+.topic-suggestion small { color: #9d95a3; font-size: 7px; letter-spacing: .11em; font-weight: 800; }
+.topic-suggestion strong { color: #6e6675; font-size: 10px; line-height: 1.35; margin-top: 4px; }
+.topic-suggestion-action { grid-column: 2; justify-self: start; color: #7457dc; font-size: 9px; font-weight: 800; }
