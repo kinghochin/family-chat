@@ -215,8 +215,8 @@ h1 span { color: #b0aab8; font-weight: 400; }
 }
 
 .composer-fields { min-width: 0; flex: 1; display: flex; align-items: center; gap: 8px; }
-.composer-fields input { height: 32px; padding: 0; border: 1px solid transparent; outline: 0; color: #514b59; font-size: 11px; background: transparent; }
-.composer-fields input:focus { border-color: #e3dff0; border-radius: 6px; background: #fff; }
+.composer-fields input { height: 32px; padding: 0; border: 0; outline: 0; box-shadow: none; color: #514b59; font-size: 11px; background: transparent; }
+.composer-fields input:focus { border: 0; outline: 0; box-shadow: none; background: transparent; }
 .composer-message { min-width: 0; flex: 1; }
 .composer-feedback { max-width: 800px; margin: 8px 0 0 42px; font-size: 10px; }
 .composer-feedback.error { color: #b35e69; }.composer-feedback.success { color: #5c9967; }
