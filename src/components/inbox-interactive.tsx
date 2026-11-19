@@ -1,8 +1,8 @@
 "use client";
 
-import { useRef, useState, useTransition } from "react";
+import { useActionState, useRef, useState } from "react";
 import { SourceBadge } from "@/components/source-badge";
-import { sendWebMessage, type SendMessageState } from "@/app/inbox/actions";
+import { initialSendMessageState, sendWebMessage, type SendMessageState } from "@/app/inbox/actions";
 
 type InboxMessage = {
   id: string;
@@ -34,15 +34,10 @@ function formatTime(value: string) {
 
 export function InboxInteractive({ initialMessages = [] }: { initialMessages?: InboxMessage[] }) {
   const [messages, setMessages] = useState<InboxMessage[]>(initialMessages.length ? initialMessages : fallbackMessages);
-  const [state, setState] = useState<SendMessageState>({ ok: false });
-  const [pending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
-
-  function submit(formData: FormData) {
-    startTransition(async () => {
-      const result = await sendWebMessage(state, formData);
-      setState(result);
-      if (!result.ok || !result.message) return;
+  const [state, formAction, pending] = useActionState(async (previousState: SendMessageState, formData: FormData) => {
+    const result = await sendWebMessage(previousState, formData);
+    if (result.ok && result.message) {
       const message = result.message;
       setMessages((current) => current.some((item) => item.id === message.id) ? current : [{
         id: message.id,
@@ -55,11 +50,12 @@ export function InboxInteractive({ initialMessages = [] }: { initialMessages?: I
         date: "Today",
       }, ...current]);
       formRef.current?.reset();
-    });
-  }
+    }
+    return result;
+  }, initialSendMessageState);
 
   return <>
-    <form ref={formRef} className="composer-wide" action={submit} encType="multipart/form-data">
+    <form ref={formRef} className="composer-wide" action={formAction} encType="multipart/form-data">
       <div className="composer-fields"><input className="composer-message" name="content" placeholder="What do you want to share with the family?" aria-label="Message" /></div>
       <label className="attachment-button">＋ Attach<input name="attachments" type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" aria-label="Attach files" /></label>
       <button className="primary-button" type="submit" disabled={pending}>{pending ? "Sending…" : "Send message"}</button>
