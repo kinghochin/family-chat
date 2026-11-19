@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { FamilyShell } from "@/components/family-shell";
+import { TopicCreateForm } from "@/components/topic-create-form";
 
 
 const topics = [
@@ -11,7 +12,8 @@ const topics = [
 
 export default function TopicsPage() {
   return <FamilyShell active="topics" title="Topics" subtitle="The conversations your family decided to keep together.">
-    <section className="topics-hero"><div><span className="family-overline">YOUR FAMILY MEMORY</span><h2>From scattered messages<br /><em>to shared context.</em></h2></div><button className="primary-button" type="button">＋ New topic</button></section>
+    <section className="topics-hero"><div><span className="family-overline">YOUR FAMILY MEMORY</span><h2>From scattered messages<br /><em>to shared context.</em></h2></div><a className="primary-button" href="#create-topic">＋ New topic</a></section>
+    <div id="create-topic"><TopicCreateForm /></div>
     <div className="topic-stats"><div><strong>4</strong><span>Active topics</span></div><div><strong>58</strong><span>Messages organised</span></div><div><strong>3</strong><span>Open questions</span></div><div><strong>12m</strong><span>Last activity</span></div></div>
     <section className="topic-grid">{topics.map((topic) => <Link href={topic.href} className={`topic-card ${topic.color}`} key={topic.title}><div className="topic-card-head"><span className="topic-type">{topic.type}</span><span className="more-button">···</span></div><h3>{topic.title}</h3><p>{topic.messages} messages · {topic.updated}</p><div className="topic-card-foot"><span className="status-dot">●</span>{topic.status}<span className="artifact-count">{topic.artifacts} artifacts</span><span className="arrow">↗</span></div><div className="topic-suggestion"><span>✦</span><div><small>SUGGESTED NEXT ACTION</small><strong>{topic.suggestion}</strong></div><span className="topic-suggestion-action">{topic.action} ↗</span></div></Link>)}<button className="new-topic-card" type="button"><span>＋</span><strong>Create a topic</strong><small>Start with a conversation or a blank page</small></button></section>
     <section className="topic-principle"><span>✦</span><div><strong>Topics are created after the conversation.</strong><p>You do not need to decide where a message belongs while you are chatting. Find the thread later, select the messages, and let Gatherly organise it.</p></div></section>
