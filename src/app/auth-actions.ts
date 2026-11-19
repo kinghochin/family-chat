@@ -22,6 +22,7 @@ export async function signInAction(_previous: AuthState, formData: FormData): Pr
     const supabase = await createSupabaseServerClient();
     const { error } = await supabase.auth.signInWithPassword({ email, password });
     if (error) return { ok: false, error: error.message };
+    await supabase.rpc("accept_pending_invites_for_current_user");
   } catch (error) {
     return { ok: false, error: error instanceof Error ? error.message : "Unable to sign in." };
   }
