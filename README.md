@@ -37,7 +37,7 @@ The current board intentionally runs with local demo state. The next implementat
 
 ## Authentication
 
-Run `supabase/migrations/003_auth_profiles.sql` after the conversation-memory migration, then run `supabase/migrations/004_message_attachments.sql` to create the private message-attachment bucket and metadata column, `supabase/migrations/005_household_settings.sql` to create the shared group details, and `supabase/migrations/006_household_members.sql` to enable member invites. Then configure the Supabase Auth URL settings so the Site URL and redirect URLs include the deployed Vercel URL. The app provides `/login` and `/signup`, protects the family routes, and uses email/password authentication.
+Run `supabase/migrations/003_auth_profiles.sql` after the conversation-memory migration, then run `supabase/migrations/004_message_attachments.sql` to create the private message-attachment bucket and metadata column, `supabase/migrations/005_household_settings.sql` to create the shared group details, `supabase/migrations/006_household_members.sql` to enable member invites, and `supabase/migrations/007_member_lifecycle.sql` to enable accepting invites, editing members, and dropping members. Then configure the Supabase Auth URL settings so the Site URL and redirect URLs include the deployed Vercel URL. The app provides `/login` and `/signup`, protects the family routes, and uses email/password authentication.
 
 ## Verification
 

@@ -45,6 +45,10 @@ export async function signUpAction(_previous: AuthState, formData: FormData): Pr
       options: { data: { display_name: displayName } },
     });
     if (error) return { ok: false, error: error.message };
+    const inviteToken = value(formData, "invite_token");
+    if (data.session && inviteToken) {
+      await supabase.rpc("accept_household_invite", { invite_token: inviteToken });
+    }
     if (data.session) redirect("/");
     return { ok: true, message: "Account created. Check your email to confirm your account, then sign in." };
   } catch (error) {
