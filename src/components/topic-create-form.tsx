@@ -1,10 +1,12 @@
 "use client";
 
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 type CreatedTopic = { id: string; name: string; description: string | null; start_at: string | null; end_at: string | null };
 
 export function TopicCreateForm() {
+  const router = useRouter();
   const [period, setPeriod] = useState("all");
   const [pending, setPending] = useState(false);
   const [error, setError] = useState("");
@@ -23,6 +25,7 @@ export function TopicCreateForm() {
       setCreated(result.topic);
       event.currentTarget.reset();
       setPeriod("all");
+      router.refresh();
     } catch (requestError) {
       setError(requestError instanceof Error ? requestError.message : "The topic could not be created.");
     } finally {
