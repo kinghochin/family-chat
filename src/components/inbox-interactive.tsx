@@ -15,19 +15,12 @@ type InboxMessage = {
   date: string;
 };
 
-const fallbackMessages: InboxMessage[] = [
-  { id: "demo-1", name: "Mum", initials: "M", tone: "peach", text: "What do we think about Japan in October? The weather should be lovely.", time: "09:12", source: "Telegram", date: "Today" },
-  { id: "demo-2", name: "Jamie", initials: "JC", tone: "purple", text: "I found a small hotel near Shibuya that looks really good.", time: "09:16", source: "Web", date: "Today" },
-  { id: "demo-3", name: "Dad", initials: "D", tone: "blue", text: "I am happy with Japan. We should decide the dates first.", time: "09:25", source: "Telegram", date: "Today" },
-  { id: "demo-4", name: "Mum", initials: "M", tone: "peach", text: "Also saving this restaurant in Kyoto — apparently you need to book early.", time: "Yesterday", source: "Telegram", date: "Yesterday" },
-  { id: "demo-5", name: "Sophie", initials: "S", tone: "green", text: "I can check school holiday dates tonight.", time: "18:42", source: "Web", date: "Yesterday" },
-];
 
 function initialsFor(name: string) { return name.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase(); }
 function formatTime(value: string) { const date = new Date(value); return Number.isNaN(date.getTime()) ? "Just now" : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
 
 export function InboxInteractive({ initialMessages = [] }: { initialMessages?: InboxMessage[] }) {
-  const [messages, setMessages] = useState<InboxMessage[]>(initialMessages.length ? initialMessages : fallbackMessages);
+  const [messages, setMessages] = useState<InboxMessage[]>(initialMessages);
   const [state, setState] = useState<SendMessageState>({ ok: false });
   const [pending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
