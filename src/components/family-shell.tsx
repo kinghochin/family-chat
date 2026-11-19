@@ -26,6 +26,19 @@ export async function getMemberDetails(): Promise<MemberDetails> {
   }
 }
 
+function ProfileMenu({ member, compact = false }: { member: MemberDetails; compact?: boolean }) {
+  return <details className={`profile-menu ${compact ? "profile-menu-compact" : ""}`}>
+    <summary className="profile-menu-trigger" aria-label="Open profile settings"><span className={`member-avatar ${compact ? "dark" : ""}`}>{member.initials}</span></summary>
+    <div className="profile-menu-panel">
+      <strong>{member.displayName}</strong>
+      <small>{member.email}</small>
+      <Link href="/settings/members">Family settings</Link>
+      <Link href="/settings/members">Profile details</Link>
+      <form action={signOutAction}><button type="submit">Sign out</button></form>
+    </div>
+  </details>;
+}
+
 export async function FamilyShell({
   children,
   active = "inbox",
@@ -51,10 +64,10 @@ export async function FamilyShell({
           <Link className={active === "members" ? "active" : ""} href="/settings/members"><span>♧</span> Family members</Link>
           <Link className={active === "flow" ? "active" : ""} href="/flow"><span>⌁</span> Product flow</Link>
         </nav>
-        <div className="family-sidebar-bottom"><div className="family-member"><span className="member-avatar">{member.initials}</span><div><strong>{member.displayName}</strong><small>{member.email}</small></div><form action={signOutAction}><button className="sign-out-button" type="submit">Sign out</button></form></div></div>
+        <div className="family-sidebar-bottom"><div className="family-member"><ProfileMenu member={member} /><div><strong>{member.displayName}</strong><small>{member.email}</small></div></div></div>
       </aside>
       <section className="family-main">
-        <header className="family-topbar"><div><span className="family-overline">THE HARRIS FAMILY</span><h1>{title}</h1><p>{subtitle}</p></div><div className="family-top-actions"><button className="family-round-button" type="button">⌕</button><button className="family-round-button" type="button">♧</button><span className="member-avatar dark">{member.initials}</span></div></header>
+        <header className="family-topbar"><div><span className="family-overline">THE HARRIS FAMILY</span><h1>{title}</h1><p>{subtitle}</p></div><div className="family-top-actions"><button className="family-round-button" type="button">⌕</button><button className="family-round-button" type="button">♧</button><ProfileMenu member={member} compact /></div></header>
         <div className="family-content">{children}</div>
       </section>
     </main>
