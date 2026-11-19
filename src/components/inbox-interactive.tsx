@@ -59,8 +59,9 @@ export function InboxInteractive({ initialMessages = [] }: { initialMessages?: I
   }
 
   return <>
-    <form ref={formRef} className="composer-wide" action={submit}>
+    <form ref={formRef} className="composer-wide" action={submit} encType="multipart/form-data">
       <div className="composer-fields"><input className="composer-message" name="content" placeholder="What do you want to share with the family?" aria-label="Message" /></div>
+      <label className="attachment-button">＋ Attach<input name="attachments" type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" aria-label="Attach files" /></label>
       <button className="primary-button" type="submit" disabled={pending}>{pending ? "Sending…" : "Send message"}</button>
     </form>
     {state.error && <p className="composer-feedback error" role="alert">{state.error}</p>}
