@@ -4,6 +4,7 @@ import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type MemberDetails = { displayName: string; email: string; initials: string };
 type GroupDetails = { name: string; description: string; avatarLabel: string };
+type HouseholdSummary = { count: number; names: string[] };
 
 export async function getMemberDetails(): Promise<MemberDetails> {
   const fallback = { displayName: "Jamie Chen", email: "Local preview", initials: "JC" };
@@ -44,6 +45,31 @@ export async function getGroupDetails(): Promise<GroupDetails> {
   }
 }
 
+export async function getHouseholdSummary(): Promise<HouseholdSummary> {
+  try {
+    const supabase = await createSupabaseServerClient();
+    const { data: memberRows } = await supabase
+      .from("household_members")
+      .select("user_id, joined_at")
+      .is("removed_at", null)
+      .order("joined_at");
+    const ids = (memberRows ?? []).map((row) => row.user_id);
+    if (!ids.length) return { count: 0, names: [] };
+    const { data: profiles } = await supabase.from("profiles").select("id, display_name").in("id", ids);
+    const namesById = new Map((profiles ?? []).map((profile) => [profile.id, profile.display_name || "Family member"]));
+    return { count: ids.length, names: ids.map((id) => namesById.get(id) || "Family member") };
+  } catch {
+    return { count: 0, names: [] };
+  }
+}
+
+function HouseholdMenu({ group, household }: { group: GroupDetails; household: HouseholdSummary }) {
+  return <details className="family-household-menu">
+    <summary className="family-household"><span className="household-avatar">{group.avatarLabel}</span><span className="family-household-copy"><strong>{group.name}</strong><small>{household.count} {household.count === 1 ? "member" : "members"}</small></span><span className="chevron">⌄</span></summary>
+    <div className="family-household-panel"><strong>{group.name}</strong>{household.names.length ? household.names.map((name) => <span key={name}>{name}</span>) : <span>No active members</span>}<Link href="/settings/members">Manage members</Link></div>
+  </details>;
+}
+
 function ProfileMenu({ member, compact = false }: { member: MemberDetails; compact?: boolean }) {
   return <details className={`profile-menu ${compact ? "profile-menu-compact" : ""}`}>
     <summary className="profile-menu-trigger" aria-label="Open profile settings"><span className={`member-avatar ${compact ? "dark" : ""}`}>{member.initials}</span></summary>
@@ -68,13 +94,13 @@ export async function FamilyShell({
   title?: string;
   subtitle?: string;
 }) {
-  const [member, group] = await Promise.all([getMemberDetails(), getGroupDetails()]);
+  const [member, group, household] = await Promise.all([getMemberDetails(), getGroupDetails(), getHouseholdSummary()]);
 
   return (
     <main className="family-shell">
       <aside className="family-sidebar">
         <Link href="/inbox" className="family-logo"><span>✦</span> Gatherly</Link>
-        <div className="family-household"><span className="household-avatar">{group.avatarLabel}</span><div><strong>{group.name}</strong><small>5 members</small></div><span className="chevron">⌄</span></div>
+        <HouseholdMenu group={group} household={household} />
         <nav className="family-nav" aria-label="Family navigation">
           <Link className={active === "inbox" ? "active" : ""} href="/inbox"><span>▤</span> Inbox</Link>
           <Link className={active === "topics" ? "active" : ""} href="/topics"><span>◈</span> Topics <b>4</b></Link>
