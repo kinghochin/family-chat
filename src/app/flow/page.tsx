@@ -1,6 +1,5 @@
 import { FamilyShell } from "@/components/family-shell";
 
-export const instant = false;
 
 export default function FlowPage() {
   return <FamilyShell active="flow" title="Product flow" subtitle="A simple picture of how family conversation becomes shared context.">

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { FamilyShell } from "@/components/family-shell";
 
-export const instant = false;
 
 const artifacts = [
   { title: "Japan trip plan", type: "Suggested plan", topic: "Japan trip", updated: "Created just now", tone: "lilac", icon: "✦", description: "A practical sequence from confirming dates to booking Tokyo and Kyoto." },

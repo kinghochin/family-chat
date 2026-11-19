@@ -1,7 +1,6 @@
 import Link from "next/link";
 import { FamilyShell } from "@/components/family-shell";
 
-export const instant = false;
 
 const topics = [
   { title: "Japan trip", type: "Trip", messages: 18, updated: "Updated 12 min ago", status: "Summary ready", color: "lilac", href: "/topics/japan-trip", artifacts: 3, suggestion: "Confirm dates, then shortlist Tokyo hotels.", action: "Open trip plan" },

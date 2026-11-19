@@ -1,6 +1,5 @@
 import { FamilyShell, getMemberDetails } from "@/components/family-shell";
 
-export const instant = false;
 
 export default async function MembersPage() {
   const member = await getMemberDetails();

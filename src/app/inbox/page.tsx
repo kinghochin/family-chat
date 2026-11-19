@@ -2,7 +2,6 @@ import { FamilyShell } from "@/components/family-shell";
 import { InboxInteractive } from "@/components/inbox-interactive";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
-export const instant = false;
 
 type InboxMessage = {
   id: string;
