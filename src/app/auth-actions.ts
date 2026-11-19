@@ -53,7 +53,12 @@ export async function signUpAction(_previous: AuthState, formData: FormData): Pr
 }
 
 export async function signOutAction() {
-  const supabase = await createSupabaseServerClient();
-  await supabase.auth.signOut();
+  try {
+    const supabase = await createSupabaseServerClient();
+    await supabase.auth.signOut({ scope: "local" });
+  } catch {
+    // The local auth cookie may already be expired; redirect regardless.
+  }
+
   redirect("/login");
 }
