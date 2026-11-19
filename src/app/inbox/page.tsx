@@ -1,4 +1,4 @@
-import { FamilyShell, getMemberDetails } from "@/components/family-shell";
+import { FamilyShell } from "@/components/family-shell";
 import { InboxInteractive } from "@/components/inbox-interactive";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
@@ -55,10 +55,10 @@ async function loadMessages(): Promise<InboxMessage[]> {
 }
 
 export async function InboxPage() {
-  const [messages, member] = await Promise.all([loadMessages(), getMemberDetails()]);
+  const messages = await loadMessages();
 
   return <FamilyShell active="inbox" title="Family inbox" subtitle="Every message, ready to become something useful.">
-    <InboxInteractive initialMessages={messages} currentMember={{ displayName: member.displayName, initials: member.initials }} />
+    <InboxInteractive initialMessages={messages} />
   </FamilyShell>;
 }
 

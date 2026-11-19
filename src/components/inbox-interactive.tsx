@@ -32,7 +32,7 @@ function formatTime(value: string) {
   return Number.isNaN(date.getTime()) ? "Just now" : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 }
 
-export function InboxInteractive({ initialMessages = [], currentMember = { displayName: "Family member", initials: "FM" } }: { initialMessages?: InboxMessage[]; currentMember?: { displayName: string; initials: string } }) {
+export function InboxInteractive({ initialMessages = [] }: { initialMessages?: InboxMessage[] }) {
   const [messages, setMessages] = useState<InboxMessage[]>(initialMessages.length ? initialMessages : fallbackMessages);
   const [state, setState] = useState<SendMessageState>({ ok: false });
   const [pending, startTransition] = useTransition();
@@ -60,8 +60,7 @@ export function InboxInteractive({ initialMessages = [], currentMember = { displ
 
   return <>
     <form ref={formRef} className="composer-wide" action={submit}>
-      <div className="composer-avatar">{currentMember.initials}</div>
-      <div className="composer-fields"><span className="composer-sender" aria-label={`Sending as ${currentMember.displayName}`}>{currentMember.displayName}</span><input className="composer-message" name="content" placeholder="What do you want to share with the family?" aria-label="Message" /></div>
+      <div className="composer-fields"><input className="composer-message" name="content" placeholder="What do you want to share with the family?" aria-label="Message" /></div>
       <button className="primary-button" type="submit" disabled={pending}>{pending ? "Sending…" : "Send message"}</button>
     </form>
     {state.error && <p className="composer-feedback error" role="alert">{state.error}</p>}
