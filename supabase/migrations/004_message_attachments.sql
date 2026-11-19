@@ -18,4 +18,4 @@ using (bucket_id = 'message-attachments');
 
 create policy "users delete their message attachments"
 on storage.objects for delete to authenticated
-using (bucket_id = 'message-attachments' and owner_id = (select auth.uid()));
+using (bucket_id = 'message-attachments' and owner_id = (select auth.uid()::text));

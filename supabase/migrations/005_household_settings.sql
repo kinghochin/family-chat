@@ -21,6 +21,7 @@ on public.household_settings for select to authenticated using (true);
 create policy "signed in users update household settings"
 on public.household_settings for update to authenticated using (true) with check (true);
 
+drop trigger if exists household_settings_touch_updated_at on public.household_settings;
 create trigger household_settings_touch_updated_at
 before update on public.household_settings
 for each row execute function public.touch_updated_at();
