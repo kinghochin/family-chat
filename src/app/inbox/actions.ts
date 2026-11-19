@@ -23,7 +23,11 @@ export async function sendWebMessage(
   formData: FormData,
 ): Promise<SendMessageState> {
   const content = String(formData.get("content") ?? "").trim();
-  const files = formData.getAll("attachments").filter((value): value is File => value instanceof File && value.size > 0);
+  const files = formData.getAll("attachments").filter((value): value is File => {
+    if (!value || typeof value !== "object") return false;
+    const candidate = value as { size?: unknown };
+    return typeof candidate.size === "number" && candidate.size > 0;
+  });
 
   if (!content && files.length === 0) return { ok: false, error: "Write a message or attach a file before sending." };
   if (content.length > 2000) return { ok: false, error: "Messages must be 2,000 characters or fewer." };
