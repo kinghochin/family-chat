@@ -1,8 +1,8 @@
 "use client";
 
-import { useActionState, useRef, useState } from "react";
+import { useRef, useState, useTransition } from "react";
 import { SourceBadge } from "@/components/source-badge";
-import { initialSendMessageState, sendWebMessage, type SendMessageState } from "@/app/inbox/actions";
+import type { SendMessageState } from "@/app/inbox/actions";
 
 type InboxMessage = {
   id: string;
@@ -23,39 +23,35 @@ const fallbackMessages: InboxMessage[] = [
   { id: "demo-5", name: "Sophie", initials: "S", tone: "green", text: "I can check school holiday dates tonight.", time: "18:42", source: "Web", date: "Yesterday" },
 ];
 
-function initialsFor(name: string) {
-  return name.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase();
-}
-
-function formatTime(value: string) {
-  const date = new Date(value);
-  return Number.isNaN(date.getTime()) ? "Just now" : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
-}
+function initialsFor(name: string) { return name.split(/\s+/).map((part) => part[0]).join("").slice(0, 2).toUpperCase(); }
+function formatTime(value: string) { const date = new Date(value); return Number.isNaN(date.getTime()) ? "Just now" : date.toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }); }
 
 export function InboxInteractive({ initialMessages = [] }: { initialMessages?: InboxMessage[] }) {
   const [messages, setMessages] = useState<InboxMessage[]>(initialMessages.length ? initialMessages : fallbackMessages);
+  const [state, setState] = useState<SendMessageState>({ ok: false });
+  const [pending, startTransition] = useTransition();
   const formRef = useRef<HTMLFormElement>(null);
-  const [state, formAction, pending] = useActionState(async (previousState: SendMessageState, formData: FormData) => {
-    const result = await sendWebMessage(previousState, formData);
-    if (result.ok && result.message) {
-      const message = result.message;
-      setMessages((current) => current.some((item) => item.id === message.id) ? current : [{
-        id: message.id,
-        name: message.sender_username,
-        initials: initialsFor(message.sender_username),
-        tone: "purple",
-        text: message.content,
-        time: formatTime(message.sent_at),
-        source: "Web",
-        date: "Today",
-      }, ...current]);
-      formRef.current?.reset();
-    }
-    return result;
-  }, initialSendMessageState);
+
+  function submit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    startTransition(async () => {
+      try {
+        const response = await fetch("/api/messages", { method: "POST", body: formData });
+        const result = await response.json() as SendMessageState;
+        setState(result);
+        if (!result.ok || !result.message) return;
+        const message = result.message;
+        setMessages((current) => current.some((item) => item.id === message.id) ? current : [{ id: message.id, name: message.sender_username, initials: initialsFor(message.sender_username), tone: "purple", text: message.content, time: formatTime(message.sent_at), source: "Web", date: "Today" }, ...current]);
+        formRef.current?.reset();
+      } catch (error) {
+        setState({ ok: false, error: error instanceof Error ? error.message : "The message could not be saved." });
+      }
+    });
+  }
 
   return <>
-    <form ref={formRef} className="composer-wide" action={formAction} encType="multipart/form-data">
+    <form ref={formRef} className="composer-wide" onSubmit={submit} encType="multipart/form-data">
       <div className="composer-fields"><input className="composer-message" name="content" placeholder="What do you want to share with the family?" aria-label="Message" /></div>
       <label className="attachment-button">＋ Attach<input name="attachments" type="file" multiple accept="image/*,.pdf,.doc,.docx,.xls,.xlsx,.txt" aria-label="Attach files" /></label>
       <button className="primary-button" type="submit" disabled={pending}>{pending ? "Sending…" : "Send message"}</button>
