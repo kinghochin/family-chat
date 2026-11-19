@@ -217,7 +217,7 @@ h1 span { color: #b0aab8; font-weight: 400; }
 .composer-fields { min-width: 0; flex: 1; display: flex; align-items: center; gap: 8px; }
 .composer-fields input { height: 32px; border: 1px solid transparent; outline: 0; color: #514b59; font-size: 11px; background: transparent; }
 .composer-fields input:focus { border-color: #e3dff0; border-radius: 6px; background: #fff; }
-.composer-username { width: 78px; color: #837b8c !important; font-weight: 700; }
+.composer-sender { color: #837b8c; font-size: 11px; font-weight: 700; white-space: nowrap; }
 .composer-message { min-width: 0; flex: 1; }
 .composer-feedback { max-width: 800px; margin: 8px 0 0 42px; font-size: 10px; }
 .composer-feedback.error { color: #b35e69; }.composer-feedback.success { color: #5c9967; }
@@ -233,6 +233,6 @@ h1 span { color: #b0aab8; font-weight: 400; }
 
 @media (max-width: 560px) {
   .composer-fields { align-items: stretch; flex-direction: column; flex: 1; }
-  .composer-username, .composer-message { width: 100%; }
+  .composer-sender, .composer-message { width: 100%; }
   .composer-feedback { margin-left: 0; }
 }
