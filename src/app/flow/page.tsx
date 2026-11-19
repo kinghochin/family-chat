@@ -1,5 +1,7 @@
 import { FamilyShell } from "@/components/family-shell";
 
+export const instant = false;
+
 export default function FlowPage() {
   return <FamilyShell active="flow" title="Product flow" subtitle="A simple picture of how family conversation becomes shared context.">
     <section className="flow-intro"><span className="family-overline">WIREFRAME · MVP OPERATING MODEL</span><h2>Talk first. Organise afterward.</h2><p>Threads are often missing when a real conversation starts. Gatherly captures the full household stream, then helps the family shape useful topics later.</p></section>
