@@ -29,7 +29,7 @@ export async function POST(_request: Request, { params }: Params) {
   if (!topic) return NextResponse.json({ ok: false, error: "Topic not found or unavailable." }, { status: 404 });
   const { data: existing } = await supabase.from("topic_selection_requests").select("id, status, created_at").eq("topic_id", topicId).in("status", ["pending", "processing"]).maybeSingle();
   if (existing) {
-    if (Date.now() - new Date(existing.created_at).getTime() < 10 * 60 * 1000) return NextResponse.json({ ok: false, error: "A message selection request is already running.", requestId: existing.id }, { status: 409 });
+    if (Date.now() - new Date(existing.created_at).getTime() < 2 * 60 * 1000) return NextResponse.json({ ok: false, error: "A message selection request is already running.", requestId: existing.id }, { status: 409 });
     await supabase.from("topic_selection_requests").update({ status: "failed", error: "The previous Hermes request timed out." }).eq("id", existing.id);
   }
 
