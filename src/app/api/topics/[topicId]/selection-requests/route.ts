@@ -27,8 +27,11 @@ export async function POST(_request: Request, { params }: Params) {
 
   const { data: topic } = await supabase.from("topics").select("id, name, description, start_at, end_at").eq("id", topicId).maybeSingle();
   if (!topic) return NextResponse.json({ ok: false, error: "Topic not found or unavailable." }, { status: 404 });
-  const { data: existing } = await supabase.from("topic_selection_requests").select("id, status").eq("topic_id", topicId).in("status", ["pending", "processing"]).maybeSingle();
-  if (existing) return NextResponse.json({ ok: false, error: "A message selection request is already running.", requestId: existing.id }, { status: 409 });
+  const { data: existing } = await supabase.from("topic_selection_requests").select("id, status, created_at").eq("topic_id", topicId).in("status", ["pending", "processing"]).maybeSingle();
+  if (existing) {
+    if (Date.now() - new Date(existing.created_at).getTime() < 10 * 60 * 1000) return NextResponse.json({ ok: false, error: "A message selection request is already running.", requestId: existing.id }, { status: 409 });
+    await supabase.from("topic_selection_requests").update({ status: "failed", error: "The previous Hermes request timed out." }).eq("id", existing.id);
+  }
 
   let messagesQuery = supabase.from("messages").select("id, sender_username, content, source, sent_at").is("deleted_at", null).order("sent_at", { ascending: false }).limit(200);
   if (topic.start_at) messagesQuery = messagesQuery.gte("sent_at", topic.start_at);
@@ -49,13 +52,14 @@ export async function POST(_request: Request, { params }: Params) {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || new URL(_request.url).origin;
   const callbackUrl = `${appUrl}/api/topics/${topicId}/selection-callback`;
-  const payload = { event: "topic.selection_requested", request_id: selectionRequest.id, callback_url: callbackUrl, callback_token: callbackToken, telegram_chat_id: process.env.HERMES_TELEGRAM_CHAT_ID || "805353200", topic, messages, instruction: "Select only the most relevant messages. Return JSON with message_id, relevance_score between 0 and 1, and rationale for each selected message. Then POST the JSON to callback_url using callback_token. Also send a concise review notification to telegram_chat_id." };
+  const payload = { event_type: "topic.selection_requested", request_id: selectionRequest.id, callback_url: callbackUrl, callback_token: callbackToken, telegram_chat_id: process.env.HERMES_TELEGRAM_CHAT_ID || "805353200", topic, messages, instruction: "Select only the most relevant messages. Return JSON with message_id, relevance_score between 0 and 1, and rationale for each selected message. Then POST the JSON to callback_url using callback_token. Also send a concise review notification to telegram_chat_id." };
   const payloadBody = JSON.stringify(payload);
   try {
     const headers: Record<string, string> = { "Content-Type": "application/json" };
     if (process.env.HERMES_WEBHOOK_SECRET) headers["X-Hub-Signature-256"] = `sha256=${crypto.createHmac("sha256", process.env.HERMES_WEBHOOK_SECRET).update(payloadBody).digest("hex")}`;
     const response = await fetch(webhookUrl, { method: "POST", headers, body: payloadBody, signal: AbortSignal.timeout(15000) });
-    if (!response.ok) throw new Error(`Hermes webhook returned HTTP ${response.status}.`);
+    const responseBody = await response.json().catch(() => ({})) as { status?: string; error?: string };
+    if (!response.ok || responseBody.status === "ignored" || responseBody.status === "duplicate") throw new Error(responseBody.error || `Hermes webhook did not accept the event${responseBody.status ? ` (${responseBody.status})` : "."}`);
   } catch (error) {
     const message = error instanceof Error ? error.message : "Could not reach Hermes webhook.";
     await supabase.from("topic_selection_requests").update({ status: "failed", error: message }).eq("id", selectionRequest.id);
