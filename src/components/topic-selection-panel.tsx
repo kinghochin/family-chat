@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { createSupabaseBrowserClient } from "@/lib/supabase/client";
 
 type Suggestion = { id: string; message_id: string; relevance_score: number | null; rationale: string; status: string; messages: { id: string; sender_username: string; content: string; source: string; sent_at: string } | null };
 type RequestState = { id: string; status: string; candidate_count: number; error: string | null; created_at: string } | null;
@@ -30,9 +31,27 @@ export function TopicSelectionPanel({ topicId }: { topicId: string }) {
   const requestIsStale = Boolean(request?.created_at && now - new Date(request.created_at).getTime() >= REQUEST_TIMEOUT_MS);
   useEffect(() => {
     if (!requestStatus || !["pending", "processing"].includes(requestStatus) || requestIsStale) return;
-    const timer = window.setInterval(() => void load(), 3000);
-    return () => window.clearInterval(timer);
-  }, [load, request?.id, requestStatus, requestIsStale]);
+    const timer = window.setTimeout(() => setNow(Date.now()), Math.max(0, REQUEST_TIMEOUT_MS - (Date.now() - new Date(request?.created_at || Date.now()).getTime())));
+    return () => window.clearTimeout(timer);
+  }, [request?.created_at, requestIsStale, requestStatus]);
+
+  useEffect(() => {
+    if (!request?.id || !requestStatus || !["pending", "processing"].includes(requestStatus) || requestIsStale) return;
+    let channel: ReturnType<ReturnType<typeof createSupabaseBrowserClient>["channel"]> | undefined;
+    try {
+      const supabase = createSupabaseBrowserClient();
+      channel = supabase.channel(`topic-selection-${request.id}`)
+        .on("postgres_changes", { event: "UPDATE", schema: "public", table: "topic_selection_requests", filter: `id=eq.${request.id}` }, () => {
+          void load();
+          window.setTimeout(() => void load(), 500);
+        })
+        .subscribe();
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Live selection updates are unavailable.";
+      window.setTimeout(() => setMessage(errorMessage), 0);
+    }
+    return () => { if (channel) void createSupabaseBrowserClient().removeChannel(channel); };
+  }, [load, request?.id, requestIsStale, requestStatus]);
 
   async function requestSelection() {
     setPending(true); setMessage("");
