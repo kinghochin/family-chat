@@ -21,7 +21,8 @@ export async function updateSession(request: NextRequest) {
   });
 
   const { data: { user } } = await supabase.auth.getUser();
-  const isPublicPath = publicPaths.has(request.nextUrl.pathname) || request.nextUrl.pathname.startsWith("/_next/") || request.nextUrl.pathname === "/favicon.ico";
+  const isSelectionCallback = /^\/api\/topics\/[^/]+\/selection-callback$/.test(request.nextUrl.pathname);
+  const isPublicPath = publicPaths.has(request.nextUrl.pathname) || isSelectionCallback || request.nextUrl.pathname.startsWith("/_next/") || request.nextUrl.pathname === "/favicon.ico";
 
   if (!user && !isPublicPath) {
     const loginUrl = request.nextUrl.clone();
