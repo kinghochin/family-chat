@@ -52,7 +52,7 @@ export async function POST(_request: Request, { params }: Params) {
 
   const appUrl = process.env.NEXT_PUBLIC_APP_URL || new URL(_request.url).origin;
   const callbackUrl = `${appUrl}/api/topics/${topicId}/selection-callback`;
-  const payload = { event_type: "topic.selection_requested", request_id: selectionRequest.id, callback_url: callbackUrl, callback_token: callbackToken, telegram_chat_id: process.env.HERMES_TELEGRAM_CHAT_ID || "805353200", topic, messages, instruction: "Select only the most relevant messages. Return JSON with message_id, relevance_score between 0 and 1, and rationale for each selected message. Then POST the JSON to callback_url using callback_token. Also send a concise review notification to telegram_chat_id." };
+  const payload = { event_type: "topic.selection_requested", request_id: selectionRequest.id, callback_url: callbackUrl, callback_token: callbackToken, telegram_chat_id: "-5417741365", topic, messages, instruction: "Select only the most relevant messages. Return JSON with message_id, relevance_score between 0 and 1, and rationale for each selected message. Then POST the JSON to callback_url using callback_token. Also send a concise review notification to the Getherly msg Telegram group (chat ID -5417741365)." };
   const payloadBody = JSON.stringify(payload);
   try {
     const headers: Record<string, string> = { "Content-Type": "application/json" };
