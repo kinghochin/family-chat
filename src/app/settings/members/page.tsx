@@ -1,6 +1,7 @@
 import { FamilyShell, getGroupDetails, getMemberDetails } from "@/components/family-shell";
 import { GroupSettingsForm } from "@/components/group-settings-form";
 import { InviteMemberForm, MemberRow, ProfileDetailsForm } from "@/components/member-settings-forms";
+import { TelegramTestButton } from "@/components/telegram-test-button";
 import { createSupabaseServerClient } from "@/lib/supabase/server";
 
 type HouseholdMember = { userId: string; displayName: string; email: string; initials: string; role: string };
@@ -49,6 +50,11 @@ export default async function MembersPage() {
         <div className="settings-card-head"><div><span className="family-overline">HOUSEHOLD</span><h2>Members</h2></div><span className="member-count">{household.members.length} active</span></div>
         <p className="settings-note">Owners can edit member names or drop members. Dropped members lose household membership but their account is not deleted.</p>
         {household.members.length ? household.members.map((m, index) => <MemberRow key={m.userId} {...m} tone={["dark", "peach", "blue", "green"][index % 4]} canManage={household.canManage && m.role !== "owner"} />) : <p className="settings-note">No household members yet. Run migration 006 and 007, then accept an invite.</p>}
+      </div>
+      <div className="settings-card">
+        <div className="settings-card-head"><div><span className="family-overline">TELEGRAM CONNECTION</span><h2>Test Getherly msg</h2></div><span className="source-badge telegram">✈ Telegram</span></div>
+        <p className="settings-note">Check that the Gatherly bot can send messages to the Getherly msg Telegram group.</p>
+        <TelegramTestButton />
       </div>
       <div className="settings-card privacy-card"><span className="privacy-icon">⌁</span><span className="family-overline">SHARED BY DESIGN</span><h2>One family memory</h2><p>Every message sent to the Telegram group or web app is visible to active household members. Deleted messages remain as a history marker so summaries stay auditable.</p><button className="outline-button" type="button">Read privacy settings</button></div>
     </section>
